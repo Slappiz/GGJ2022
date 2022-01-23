@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Board
@@ -10,21 +11,23 @@ namespace Board
         [SerializeField] private Node _nodePrefab;
         [SerializeField] private float _spacing = 2f;
         
-        private Node[] _nodes;
+        public Node[] Nodes { get; private set; }
+        
+        // private void Awake()
+        // {
+        //     _nodes = new Node[_height * _width];
+        //     Build();
+        //     
+        //     // Set camera position
+        //     // var camPos = Camera.main.gameObject.transform.position;
+        //     // var newCamPos = new Vector3(_width * 0.5f * _spacing, _height * 0.5f * _spacing, camPos.z);
+        //     // Camera.main.gameObject.transform.position = newCamPos;
+        // }
 
-        private void Awake()
+        public void Build()
         {
-            _nodes = new Node[_height * _width];
-            Build();
+            Nodes = new Node[_height * _width];
             
-            // Set camera position
-            // var camPos = Camera.main.gameObject.transform.position;
-            // var newCamPos = new Vector3(_width * 0.5f * _spacing, _height * 0.5f * _spacing, camPos.z);
-            // Camera.main.gameObject.transform.position = newCamPos;
-        }
-
-        private void Build()
-        {
             for (int y = 0, i = 0; y < _height; y++) 
             {
                 for (int x = 0; x < _width; x++) 
@@ -41,7 +44,7 @@ namespace Board
             position.y = y * _spacing;
             position.z = 0f;
 
-            Node node = _nodes[i] = Instantiate(_nodePrefab);
+            var node = Nodes[i] = Instantiate(_nodePrefab);
             node.transform.SetParent(transform, false);
             node.transform.localPosition = position;
         }

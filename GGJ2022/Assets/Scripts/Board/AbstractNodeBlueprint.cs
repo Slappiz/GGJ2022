@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public abstract class AbstractNodeBlueprint : ScriptableObject
+namespace Board
 {
-    
+    public abstract class AbstractNodeBlueprint : ScriptableObject
+    {
+        
+    }
 }
