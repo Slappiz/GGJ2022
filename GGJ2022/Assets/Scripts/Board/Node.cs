@@ -1,22 +1,28 @@
-﻿using UnityEngine;
+﻿using Game;
+using UnityEngine;
 
 namespace Board
 {
-    public enum NodeType
-    {
-        None =  default,
-        Root = 1,
-        Resource = 2,
-        Fort = 3,
-    }
-    
     public class Node : MonoBehaviour
     {
+        [SerializeField] private SpriteRenderer _spriteRenderer;
+        
         public NodeType Type { get; private set; }
-
-        public void Setup(AbstractNodeBlueprint blueprint)
+        public int Cost { get; private set; }
+        public Team Team { get; private set; }
+        public int Resoruces { get; private set; }
+        public void Setup(NodeBlueprint blueprint)
         {
-            // Todo :  set type
+            Type = blueprint.Type;
+            Cost = blueprint.ResourceCost;
+            Resoruces = blueprint.ResourceTurn;
+            
+            _spriteRenderer.sprite = blueprint.Icon;
+        }
+
+        public void SetOwner(Team team)
+        {
+            Team = team;
         }
     }
 }

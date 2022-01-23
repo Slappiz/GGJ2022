@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Board
 {
@@ -35,8 +33,15 @@ namespace Board
                     CreateNode(x, y, i++);
                 }
             }
+            
+            SetupNodes();
         }
 
+        private void SetupNodes()
+        {
+            // Todo: setup nodes
+        }
+        
         private void CreateNode(int x, int y, int i)
         {
             Vector3 position;

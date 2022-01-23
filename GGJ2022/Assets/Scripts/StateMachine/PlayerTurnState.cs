@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Game;
 
 namespace StateMachine
 {
@@ -6,6 +7,7 @@ namespace StateMachine
     {
         public override void Enter()
         {
+            StateHandler.ResourceHandler.AddResources(StateHandler.Board.Nodes, Team.Player);
         }
 
         public override IEnumerator Enumerator()

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
+using Ui;
 using UnityEngine;
 
 namespace StateMachine
@@ -8,12 +10,15 @@ namespace StateMachine
     public class StateHandler : MonoBehaviour
     {
         [SerializeField] private Board.Board _board;
+        [SerializeField] private PlayerUI _playerUI;
         
         private Dictionary<Type, AbstractState> _states = new Dictionary<Type, AbstractState>();
         private AbstractState _activeState;
         private Coroutine _activeCoroutine;
 
         public Board.Board Board => _board;
+        public ResourceHandler ResourceHandler { get; private set; }
+        public PlayerUI PlayerUI => _playerUI;
         
         private void Awake()
         {
@@ -22,6 +27,7 @@ namespace StateMachine
 
         void Init()
         {
+            ResourceHandler = new ResourceHandler(0);
             ChangeState<InitState>();
         }
         
