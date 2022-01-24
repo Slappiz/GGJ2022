@@ -40,7 +40,7 @@ namespace Game
             {
                 if (node.Team == team)
                 {
-                    AddResources(node.Resoruces, team);
+                    AddResources(node.Resources, team);
                 }
             }
         }

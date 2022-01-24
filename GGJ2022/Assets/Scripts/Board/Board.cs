@@ -50,8 +50,28 @@ namespace Board
             position.z = 0f;
 
             var node = Nodes[i] = Instantiate(_nodePrefab);
+            node.name = $"Node {i} - ({x},{y})";
             node.transform.SetParent(transform, false);
             node.transform.localPosition = position;
+            
+            // Set neighbors
+            if (x > 0)
+            {
+                node.SetNeighbor(NodeDirection.W, Nodes[i - 1]);
+            }
+            if (y > 0)
+            {
+                node.SetNeighbor(NodeDirection.S, Nodes[i - _width]);
+                if (x > 0)
+                {
+                    node.SetNeighbor(NodeDirection.SW, Nodes[i - _width - 1]);
+                }
+
+                if (x < _width)
+                {
+                    node.SetNeighbor(NodeDirection.SE, Nodes[i - _width + 1]);
+                }
+            }
         }
     }
 }
