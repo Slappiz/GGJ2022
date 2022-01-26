@@ -6,34 +6,34 @@ namespace Board
     public struct Coordinates
     {
         [SerializeField]private int _x;
-        [SerializeField]private int _z;
+        [SerializeField]private int _y;
         
         public int X => _x;
-        public int Z => _z;
+        public int Y => _y;
 
-        public Coordinates(int x, int z)
+        public Coordinates(int x, int y)
         {
             _x = x;
-            _z = z;
+            _y = y;
         }
 
-        public static Coordinates FromOffsetCoordinates(int x, int z)
+        public static Coordinates FromOffsetCoordinates(int x, int y)
         {
-            return new Coordinates(x, z);
+            return new Coordinates(x, y);
         }
 
-        public override string ToString() => $"({X}, {Z})";
-        public string ToStringOnSeparateLines() => $"{X}\n{Z}";
+        public override string ToString() => $"({X}, {Y})";
+        public string ToStringOnSeparateLines() => $"{X}\n{Y}";
         
         public static Coordinates FromPosition(Vector3 position)
         {
             float x = position.x / BoardMetrics.Size;
-            float z = position.z;
+            float y = position.y;
 
             int iX = Mathf.RoundToInt(x);
-            int iZ = Mathf.RoundToInt(z);
+            int iY = Mathf.RoundToInt(y);
 
-            return new Coordinates(iX, iZ);
+            return new Coordinates(iX, iY);
         }
     }
 }

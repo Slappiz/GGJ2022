@@ -7,6 +7,8 @@ namespace Board
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private Node[] _neighbors = new Node[8];
+
+        public Coordinates Coordinate { get; set; }
         public NodeType Type { get; private set; }
         public int Cost { get; private set; }
         public Team Team { get; private set; }
@@ -19,6 +21,9 @@ namespace Board
             Resources = blueprint.ResourceTurn;
             
             _spriteRenderer.sprite = blueprint.Icon;
+            _spriteRenderer.color = blueprint.Color;
+            
+            ToggleNode(true);
         }
         
         public Node GetNeighbor(NodeDirection direction)

@@ -1,13 +1,24 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Board
 {
     public class Board : MonoBehaviour
     {
+        [Header("Blueprints")] 
+        [SerializeField] private NodeBlueprint _defaultNode;
+        [SerializeField] private NodeBlueprint _rootNode;
+        [SerializeField] private NodeBlueprint _resourceNode;
+        [SerializeField] private NodeBlueprint _fortNode;
+        
+        [Header("Board Settings")]
         [SerializeField] private int _height = 5;
         [SerializeField] private int _width = 9;
         [SerializeField] private Node _nodePrefab;
         [SerializeField] private float _spacing = 2f;
+        [SerializeField] private int _minNodeCount = 2;
+        [SerializeField] private int _maxNodeCount = 3;
         
         public Node[] Nodes { get; private set; }
         
@@ -39,7 +50,42 @@ namespace Board
 
         private void SetupNodes()
         {
-            // Todo: setup nodes
+            for (var x = 0; x < _width;x++)
+            {
+                var nodes = GetNodesFromColumn(x);
+
+                if (x == 0 || x == _width - 1)
+                {
+                    var rootIndex = Random.Range(0, _height);
+                    for (var i = 0; i < nodes.Count; i++)
+                    {
+                        if (rootIndex == i)
+                        {
+                            nodes[i].Setup(_rootNode);
+                            continue;
+                        }
+                        nodes[i].ToggleNode(false);
+                    }
+                }
+                else
+                {
+                    var resIndex = Random.Range(0, _height);
+                    for (var i = 0; i < nodes.Count; i++)
+                    {
+                        if (resIndex == i)
+                        {
+                            nodes[i].Setup(_resourceNode);
+                            continue;
+                        }
+                        nodes[i].ToggleNode(false);
+                    }
+                }
+            }
+        }
+
+        private List<Node> GetNodesFromColumn(int x)
+        {
+            return Nodes.Where(node => node.Coordinate.X == x).ToList();
         }
         
         private void CreateNode(int x, int y, int i)
@@ -53,7 +99,7 @@ namespace Board
             node.name = $"Node {i} - ({x},{y})";
             node.transform.SetParent(transform, false);
             node.transform.localPosition = position;
-            
+            node.Coordinate = Coordinates.FromOffsetCoordinates(x, y);
             // Set neighbors
             if (x > 0)
             {

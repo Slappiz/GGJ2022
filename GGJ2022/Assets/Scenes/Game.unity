@@ -218,10 +218,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb390ecb6b284ce1aadba69df88b8368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultNode: {fileID: 11400000, guid: 7f810912928d96740a8401052af4dae6, type: 2}
+  _rootNode: {fileID: 11400000, guid: cd008323524f7a74eb3d02c5c1923260, type: 2}
+  _resourceNode: {fileID: 11400000, guid: 3d6108f9dbe806c4f9d9b767b5d44067, type: 2}
+  _fortNode: {fileID: 11400000, guid: 62ff0a8ae4bf8cd408dc94c730e33715, type: 2}
   _height: 5
   _width: 9
   _nodePrefab: {fileID: 2348489217457470925, guid: 7020af09ea3928145adacbeb6d3b6e56, type: 3}
   _spacing: 1.5
+  _minNodeCount: 2
+  _maxNodeCount: 3
 --- !u!4 &214742839
 Transform:
   m_ObjectHideFlags: 0
