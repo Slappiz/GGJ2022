@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 965f7b1e202e454493b7b07a0d71c9ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectedNode: {fileID: 11400000, guid: df983186e33978b429ea10d25aa8fd2f, type: 2}
+  HoverNode: {fileID: 11400000, guid: 06710aa4dee3fdd45a615d71581ce6b6, type: 2}
 --- !u!4 &37120903
 Transform:
   m_ObjectHideFlags: 0
@@ -498,6 +500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _board: {fileID: 214742838}
   _playerUI: {fileID: 0}
+  _playerController: {fileID: 37120902}
 --- !u!4 &745525160
 Transform:
   m_ObjectHideFlags: 0
