@@ -6,6 +6,8 @@ namespace Board
     public class Node : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private GameObject _hoverHighlight;
+        [SerializeField] private GameObject _selectedHighlight;
         [SerializeField] private Node[] _neighbors = new Node[8];
 
         public Coordinates Coordinate { get; set; }
@@ -23,7 +25,20 @@ namespace Board
             _spriteRenderer.sprite = blueprint.Icon;
             _spriteRenderer.color = blueprint.Color;
             
+            SetSelectedHighlight(false);
+            SetHoverHighlight(false);
+            
             ToggleNode(true);
+        }
+
+        public void SetHoverHighlight(bool active)
+        {
+            _hoverHighlight.SetActive(active);
+        }
+
+        public void SetSelectedHighlight(bool active)
+        {
+            _selectedHighlight.SetActive(active);
         }
         
         public Node GetNeighbor(NodeDirection direction)

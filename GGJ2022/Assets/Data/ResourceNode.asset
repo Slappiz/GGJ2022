@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ResourceNode
   m_EditorClassIdentifier: 
   _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  _color: {r: 1, g: 0.9470248, b: 0, a: 0}
+  _color: {r: 1, g: 0.9470248, b: 0, a: 1}
   _type: 2
   _resourceCost: 3
   _resourceTurn: 3

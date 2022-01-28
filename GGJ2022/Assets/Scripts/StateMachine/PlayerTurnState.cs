@@ -8,6 +8,7 @@ namespace StateMachine
         public override void Enter()
         {
             StateHandler.ResourceHandler.AddResources(StateHandler.Board.Nodes, Team.Player);
+            StateHandler.PlayerController.Enabled = true;
         }
 
         public override IEnumerator Enumerator()
@@ -18,6 +19,7 @@ namespace StateMachine
 
         public override void Exit()
         {
+            StateHandler.PlayerController.Enabled = false;
         }
     }
 }

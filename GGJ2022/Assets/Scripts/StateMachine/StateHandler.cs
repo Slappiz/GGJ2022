@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using Game;
 using Ui;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace StateMachine
     {
         [SerializeField] private Board.Board _board;
         [SerializeField] private PlayerUI _playerUI;
+        [SerializeField] private PlayerController _playerController;
         
         private Dictionary<Type, AbstractState> _states = new Dictionary<Type, AbstractState>();
         private AbstractState _activeState;
@@ -19,6 +21,7 @@ namespace StateMachine
         public Board.Board Board => _board;
         public ResourceHandler ResourceHandler { get; private set; }
         public PlayerUI PlayerUI => _playerUI;
+        public PlayerController PlayerController => _playerController;
         
         private void Awake()
         {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FortNode
   m_EditorClassIdentifier: 
   _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  _color: {r: 0.031846523, g: 0, b: 1, a: 0}
+  _color: {r: 0.031846523, g: 0, b: 1, a: 1}
   _type: 3
   _resourceCost: 7
   _resourceTurn: 0

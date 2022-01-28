@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultNode
   m_EditorClassIdentifier: 
   _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  _color: {r: 0.5, g: 0.5, b: 0.5, a: 0}
+  _color: {r: 1, g: 1, b: 1, a: 1}
   _type: 0
   _resourceCost: 0
   _resourceTurn: 0
