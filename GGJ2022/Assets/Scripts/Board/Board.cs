@@ -55,35 +55,43 @@ namespace Board
 
         private IEnumerator BreadthFirstSearch()
         {
-            var startRoot = 0;//Random.Range(0, _height);
+            var startRoot = Random.Range(0, _height);
             var endRoot = Random.Range(0, _height);
 
             var frontier = new Queue<Node>();
             var startNode = GetNodeFromCoordinates(0, startRoot);
             frontier.Enqueue(startNode);
-            var reached = new List<Node>();
-            reached.Add(startNode);
 
+            var cameFrom = new Dictionary<Node,Node>();
+            cameFrom.Add(startNode, startNode);
+            
+            // Frontier
             while (frontier.Count > 0)
             {
                 var current = frontier.Dequeue();
                 foreach (var n in current.Neighbors)
                 {
                     if(n == null) continue;
-                    if(reached.Contains(n)) continue;
+                    if(cameFrom.ContainsKey(n)) continue;
                     frontier.Enqueue(n);
-                    reached.Add(n);
+                    cameFrom.Add(n, current);
                     yield return new WaitForSeconds(0.1f);
                     n.SetColor(Color.blue);
                 }
             }
-
-            // if (!reached.Contains(GetNodeFromCoordinates(_width, endRoot)))
-            // {
-            //     BreadthFirstSearch();
-            // }
-            Debug.Log($"Last {reached.Last().name}");
+            
+            // path
+            var currentPathNode = GetNodeFromCoordinates(_width - 1, endRoot); // goal
+            var path = new List<Node>();
+            while (currentPathNode != startNode)
+            {
+                currentPathNode.SetColor(Color.green);
+                path.Add(currentPathNode);
+                currentPathNode = cameFrom[currentPathNode];
+                yield return new WaitForSeconds(0.1f);
+            }
         }
+        
 
         private Node GetNodeFromCoordinates(int x, int y)
         {
