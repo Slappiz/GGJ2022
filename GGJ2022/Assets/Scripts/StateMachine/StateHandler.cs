@@ -13,6 +13,8 @@ namespace StateMachine
         [SerializeField] private Board.Board _board;
         [SerializeField] private PlayerUI _playerUI;
         [SerializeField] private PlayerController _playerController;
+        [SerializeField] private WinScreen _winScreen;
+        [SerializeField] private LoseScreen _loseScreen;
         
         private Dictionary<Type, AbstractState> _states = new Dictionary<Type, AbstractState>();
         private AbstractState _activeState;
@@ -22,6 +24,8 @@ namespace StateMachine
         public GameLogic GameLogic { get; private set; }
         public PlayerUI PlayerUI => _playerUI;
         public PlayerController PlayerController => _playerController;
+        public WinScreen WinScreen => _winScreen;
+        public LoseScreen LoseScreen => _loseScreen;
         
         private void Awake()
         {
@@ -31,6 +35,8 @@ namespace StateMachine
         void Init()
         {
             GameLogic = new GameLogic(_board);
+            WinScreen.SetVisibility(false);
+            LoseScreen.SetVisibility(false);
             ChangeState<InitState>();
         }
 

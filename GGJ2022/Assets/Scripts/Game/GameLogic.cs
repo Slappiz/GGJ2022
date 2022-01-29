@@ -24,12 +24,6 @@ namespace Game
             Health = 2;
         }
         
-
-        /// <summary>
-        /// Check if node is claimable by player at current state
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
         public bool CanClaim(Node node)
         {
             if (node.Team == Team.Player)
