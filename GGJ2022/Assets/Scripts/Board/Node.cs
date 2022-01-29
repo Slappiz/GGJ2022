@@ -16,6 +16,7 @@ namespace Board
         public Team Team { get; private set; }
         public int Resources { get; private set; }
         public Node[] Neighbors => _neighbors;
+        public bool Active => gameObject.activeSelf;
 
         public void Setup(NodeBlueprint blueprint)
         {

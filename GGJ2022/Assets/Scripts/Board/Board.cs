@@ -12,6 +12,7 @@ namespace Board
         [SerializeField] private NodeBlueprint _rootNode;
         [SerializeField] private NodeBlueprint _resourceNode;
         [SerializeField] private NodeBlueprint _fortNode;
+        [SerializeField] private NodeBlueprint _trapNode;
         
         [Header("Board Settings")]
         [SerializeField] private int _height = 5;
@@ -22,19 +23,8 @@ namespace Board
         [SerializeField] private int _maxNodeCount = 3;
         
         public Node[] Nodes { get; private set; }
-        
-        
-        
-        // private void Awake()
-        // {
-        //     _nodes = new Node[_height * _width];
-        //     Build();
-        //     
-        //     // Set camera position
-        //     // var camPos = Camera.main.gameObject.transform.position;
-        //     // var newCamPos = new Vector3(_width * 0.5f * _spacing, _height * 0.5f * _spacing, camPos.z);
-        //     // Camera.main.gameObject.transform.position = newCamPos;
-        // }
+        public Node StartNode { get; private set; }
+        public Node GoalNode { get; private set; }
 
         public void Build()
         {
@@ -55,15 +45,11 @@ namespace Board
 
         private IEnumerator BreadthFirstSearch()
         {
-            var startRoot = Random.Range(0, _height);
-            var endRoot = Random.Range(0, _height);
-
             var frontier = new Queue<Node>();
-            var startNode = GetNodeFromCoordinates(0, startRoot);
-            frontier.Enqueue(startNode);
+            frontier.Enqueue(StartNode);
 
             var cameFrom = new Dictionary<Node,Node>();
-            cameFrom.Add(startNode, startNode);
+            cameFrom.Add(StartNode, StartNode);
             
             // Frontier
             while (frontier.Count > 0)
@@ -71,7 +57,7 @@ namespace Board
                 var current = frontier.Dequeue();
                 foreach (var n in current.Neighbors)
                 {
-                    if(n == null) continue;
+                    if(n == null || n.Type == NodeType.Trap) continue;
                     if(cameFrom.ContainsKey(n)) continue;
                     frontier.Enqueue(n);
                     cameFrom.Add(n, current);
@@ -81,9 +67,9 @@ namespace Board
             }
             
             // path
-            var currentPathNode = GetNodeFromCoordinates(_width - 1, endRoot); // goal
+            var currentPathNode = GoalNode; // goal
             var path = new List<Node>();
-            while (currentPathNode != startNode)
+            while (currentPathNode != StartNode)
             {
                 currentPathNode.SetColor(Color.green);
                 path.Add(currentPathNode);
@@ -112,6 +98,22 @@ namespace Board
                         if (rootIndex == i)
                         {
                             nodes[i].Setup(_rootNode);
+                            if (x == 0) { StartNode = nodes[i]; }
+                            else { GoalNode = nodes[i]; }
+                            continue;
+                        }
+                        nodes[i].Setup(_defaultNode);
+                        //nodes[i].ToggleNode(false);
+                    }
+                }
+                else if (x == 2 || x == 4 || x == 6)
+                {
+                    var pathIndex = Random.Range(0, _height);
+                    for (var i = 0; i < nodes.Count; i++)
+                    {
+                        if (pathIndex != i)
+                        {
+                            nodes[i].Setup(_trapNode);
                             continue;
                         }
                         nodes[i].Setup(_defaultNode);
