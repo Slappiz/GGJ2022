@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 using Board;
 
@@ -7,14 +8,17 @@ namespace Game
     public class GameLogic
     {
         private Board.Board _board;
-        private ResourceHandler _resourceHandler;
-        public const int NukeCost = 5;
-        public const int ScoutCost = 3;
+        public event Action GameWon;
+        public event Action GameLost;
         
-        public GameLogic(Board.Board board, ResourceHandler resourceHandler)
+        public int NukeCharges { get; private set; }
+        public int ScoutCharges { get; private set; }
+        public GameLogic(Board.Board board)
         {
             _board = board;
-            _resourceHandler = resourceHandler;
+            
+            NukeCharges = 1;
+            ScoutCharges = 2;
         }
         
 
@@ -23,13 +27,8 @@ namespace Game
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public bool IsClaimable(Node node)
+        public bool CanClaim(Node node)
         {
-            if (node.Cost > _resourceHandler.PlayerResources)
-            {
-                return false;
-            }
-
             if (node.Team == Team.Player)
             {
                 return false;
@@ -45,13 +44,48 @@ namespace Game
         public bool CanNuke(Node node)
         {
             if (node.Team != Team.Player) return false;
-            return NukeCost <= _resourceHandler.PlayerResources;
+            return NukeCharges > 0;
         }
         
         public bool CanScout(Node node)
         {
             if (node.IsRevealed) return false;
-            return ScoutCost <= _resourceHandler.PlayerResources;
+            return ScoutCharges > 0;
+        }
+
+        public void ClaimNode(Node node)
+        {
+            if (!CanClaim(node)) return;
+            var type = node.Reveal();
+            node.SetOwner(Team.Player);
+            if (type == NodeType.Root)
+            {
+                GameWon.Invoke();
+            }
+        }
+        
+        public void NukeNode(Node node)
+        {
+            if (!CanNuke(node)) return;
+            
+            foreach (var neighbor in node.Neighbors)
+            {
+                if(neighbor == null) continue;
+                if(neighbor.Type == NodeType.Root) continue;
+                neighbor.Nuke();
+            }
+
+            NukeCharges--;
+            
+            _board.EvaluateNodes();
+        }
+
+        public void ScoutNode(Node node)
+        {
+            if (!CanScout(node)) return;
+
+            node.Reveal();
+            ScoutCharges--;
         }
     }
 }

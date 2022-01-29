@@ -41,7 +41,7 @@ namespace Board
             ToggleNode(true);
         }
 
-        public NodeType RevealNode()
+        public NodeType Reveal()
         {
             IsRevealed = true;
             
@@ -51,10 +51,11 @@ namespace Board
             }
             
             _spriteRenderer.sprite = _blueprint.Icon;
-
+            _spriteRenderer.color = Color.yellow;
+            
             return Type;
         }
-        
+
         public void SetColor(Color color)
         {
             _spriteRenderer.color = color;
@@ -65,6 +66,12 @@ namespace Board
             _hoverHighlight.SetActive(active);
         }
 
+        public void Nuke()
+        {
+            Type = NodeType.Standard;
+            _spriteRenderer.color = Color.gray;
+        }
+        
         public void SetSelectedHighlight(bool active)
         {
             _selectedHighlight.SetActive(active);
@@ -131,7 +138,14 @@ namespace Board
         public void SetOwner(Team team)
         {
             Team = team;
-            _spriteRenderer.color = Color.blue;
+            if (Type != NodeType.Trap)
+            {
+                _spriteRenderer.color = Color.blue;
+            }
+            else
+            {
+                _spriteRenderer.color = Color.red;
+            }
         }
     }
 }

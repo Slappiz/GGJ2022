@@ -7,7 +7,7 @@ namespace StateMachine
     {
         public override void Enter()
         {
-            StateHandler.ResourceHandler.AddResources(StateHandler.Board.Nodes, Team.Ai);
+            
         }
 
         public override IEnumerator Enumerator()

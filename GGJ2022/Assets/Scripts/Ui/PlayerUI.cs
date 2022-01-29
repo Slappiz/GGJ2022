@@ -30,26 +30,40 @@ namespace Ui
             HandleSelectedNodeChanged(_selectedNode.RuntimeValue);
         }
 
+        private void RefreshAllButtonTexts()
+        {
+            RefreshButtonText(_claimNodeButton, $"Claim");
+            RefreshButtonText(_nukeNodeButton, $"Nuke ({_logic.NukeCharges})");
+            RefreshButtonText(_scoutNodeButton, $"Scout ({_logic.ScoutCharges})");
+        }
+        
+        private void RefreshButtonText(Button button, string text)
+        {
+            var t = button.GetComponentInChildren<Text>();
+            t.text = text;
+        }
+
         private void HandleNukeClick()
         {
-            
+            _logic.NukeNode(_selectedNode.RuntimeValue);
+            HandleSelectedNodeChanged(_selectedNode.RuntimeValue); // Refresh ui
         }
 
         private void HandleScoutClick()
         {
-            
+            _logic.ScoutNode(_selectedNode.RuntimeValue);
+            HandleSelectedNodeChanged(_selectedNode.RuntimeValue); // Refresh ui
         }
 
         private void HandleClaimClick()
         {
-            _selectedNode.RuntimeValue.RevealNode();
-            _selectedNode.RuntimeValue.SetOwner(Team.Player);
+            _logic.ClaimNode(_selectedNode.RuntimeValue);
             HandleSelectedNodeChanged(_selectedNode.RuntimeValue); // Refresh ui
         }
 
         private void CheckClaim(Node node)
         {
-            _claimNodeButton.interactable = _logic.IsClaimable(node);
+            _claimNodeButton.interactable = _logic.CanClaim(node);
         }
 
         private void CheckNuke(Node node)
@@ -64,6 +78,7 @@ namespace Ui
 
         private void HandleSelectedNodeChanged(Node node)
         {
+            RefreshAllButtonTexts();
             if (node == null)
             {
                 _claimNodeButton.interactable = false;

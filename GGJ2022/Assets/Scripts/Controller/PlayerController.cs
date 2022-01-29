@@ -27,7 +27,6 @@ namespace Controller
 
             if (Input.GetMouseButton(0))
             {
-                Debug.Log("Click");
                 if (HoverNode.RuntimeValue != null)
                 {
                     if(SelectedNode.RuntimeValue == HoverNode.RuntimeValue) return;

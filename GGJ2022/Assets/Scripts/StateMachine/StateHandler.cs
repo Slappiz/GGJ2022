@@ -19,7 +19,6 @@ namespace StateMachine
         private Coroutine _activeCoroutine;
 
         public Board.Board Board => _board;
-        public ResourceHandler ResourceHandler { get; private set; }
         public GameLogic GameLogic { get; private set; }
         public PlayerUI PlayerUI => _playerUI;
         public PlayerController PlayerController => _playerController;
@@ -31,11 +30,14 @@ namespace StateMachine
 
         void Init()
         {
-            ResourceHandler = new ResourceHandler(5);
-            GameLogic = new GameLogic(Board, ResourceHandler);
+            GameLogic = new GameLogic(_board);
+
+            GameLogic.GameWon += OnGameWon;
+            GameLogic.GameLost += OnGameLost;
+            
             ChangeState<InitState>();
         }
-        
+
         public abstract class AbstractState
         {
             public StateHandler StateHandler { get; internal set; }
@@ -43,6 +45,24 @@ namespace StateMachine
             public abstract void Enter();
             public abstract IEnumerator Enumerator();
             public abstract void Exit();
+        }
+        
+        private void OnGameLost()
+        {
+            // change to lose state
+            Debug.Log("Game Lost");
+        }
+
+        private void OnGameWon()
+        {
+            // change to win state
+            Debug.Log("Game Won");
+        }
+
+        private void OnDestroy()
+        {
+            GameLogic.GameWon -= OnGameWon;
+            GameLogic.GameLost -= OnGameLost;
         }
 
         public void ChangeState<T>() where T : AbstractState, new()

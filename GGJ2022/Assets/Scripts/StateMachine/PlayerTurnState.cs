@@ -7,7 +7,6 @@ namespace StateMachine
     {
         public override void Enter()
         {
-            StateHandler.ResourceHandler.AddResources(StateHandler.Board.Nodes, Team.Player);
             StateHandler.PlayerController.Enabled = true;
         }
 

@@ -18,8 +18,6 @@ namespace Board
         [Header("Blueprints")] 
         [SerializeField] private NodeBlueprint _defaultNode;
         [SerializeField] private NodeBlueprint _rootNode;
-        [SerializeField] private NodeBlueprint _resourceNode;
-        [SerializeField] private NodeBlueprint _fortNode;
         [SerializeField] private NodeBlueprint _trapNode;
         
         [Header("Board Settings")]
@@ -27,8 +25,6 @@ namespace Board
         [SerializeField] private int _width = 9;
         [SerializeField] private Node _nodePrefab;
         [SerializeField] private float _spacing = 2f;
-        [SerializeField] private int _minNodeCount = 2;
-        [SerializeField] private int _maxNodeCount = 3;
 
         private Coroutine _activeCoroutine;
         private bool _boardIsValid;
@@ -60,9 +56,20 @@ namespace Board
                 yield return BreadthFirstSearch();
                 EvaluateNodes();
             }
+            
+            GoalNode.Reveal();
+            GoalNode.SetColor(Color.green);
+            
+            StartNode.SetOwner(Team.Player);
+            foreach (var neighbor in StartNode.Neighbors)
+            {
+                if (neighbor == null) continue;
+                // Set all neighbors to default
+                neighbor.Setup(_defaultNode);
+            }
         }
 
-        private void EvaluateNodes()
+        public void EvaluateNodes()
         {
             foreach (var node in Nodes)
             {
@@ -75,7 +82,6 @@ namespace Board
                 }
 
                 node.Label.text = trapCount.ToString();
-                node.Label.enabled = false;
             }
         }
 
@@ -131,21 +137,17 @@ namespace Board
             foreach (var node in Nodes)
             {
                 var typeIndex = Random.Range(2, Enum.GetNames(typeof(NodeType)).Length); // Skip NodeType 'None' and 'Root'
+                Debug.Log(typeIndex);
                 var type = (NodeType)typeIndex;
 
                 switch (type)
                 {
-                    case NodeType.Resource:
-                        node.Setup(_resourceNode);
-                        break;
-                    case NodeType.Fort:
-                        node.Setup(_fortNode);
+                    case NodeType.Standard:
+                        node.Setup(_defaultNode);
                         break;
                     case NodeType.Trap:
                         node.Setup(_trapNode);
                         break;
-                    case NodeType.None:
-                    case NodeType.Root:
                     default:
                         Debug.Log("Shouldn't get here!");
                         break;
@@ -157,21 +159,12 @@ namespace Board
             var rootIndex = Random.Range(0, _height);
             firstColumnNodes[rootIndex].Setup(_rootNode);
             StartNode = firstColumnNodes[rootIndex];
-            StartNode.SetOwner(Team.Player);
-            foreach (var neighbor in StartNode.Neighbors)
-            {
-                if (neighbor == null) continue;
-                // Set all neighbors to default
-                neighbor.Setup(_defaultNode);
-            }
-      
+
             // Set Goal
             var lastColumnNodes = GetNodesFromColumn(_width - 1);
             var goalIndex = Random.Range(0, _height);
             lastColumnNodes[goalIndex].Setup(_rootNode);
             GoalNode = lastColumnNodes[goalIndex];
-            GoalNode.RevealNode();
-            GoalNode.SetColor(Color.green);
         }
 
         private List<Node> GetNodesFromColumn(int x)
