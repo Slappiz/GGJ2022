@@ -54,7 +54,6 @@ namespace Board
             {
                 RandomizeBoard();
                 yield return BreadthFirstSearch();
-                EvaluateNodes();
             }
             
             GoalNode.Reveal();
@@ -67,18 +66,22 @@ namespace Board
                 // Set all neighbors to default
                 neighbor.Setup(_defaultNode);
             }
+            EvaluateNodes();
         }
 
         public void EvaluateNodes()
         {
             foreach (var node in Nodes)
             {
+                node.Label.text = string.Empty;
                 var trapCount = 0;
                 foreach (var neighbor in node.Neighbors)
                 {
                     if(neighbor == null) continue;
-                    if(neighbor.Type != NodeType.Trap) continue;
-                    trapCount++;
+                    if (neighbor.Type == NodeType.Trap)
+                    {
+                        trapCount++;
+                    }
                 }
 
                 node.Label.text = trapCount.ToString();

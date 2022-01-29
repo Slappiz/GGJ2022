@@ -463,15 +463,11 @@ MonoBehaviour:
   _nodeLabelPrefab: {fileID: 4394385949188034682, guid: 380fd851e8956504bbf978b8d03aaf03, type: 3}
   _defaultNode: {fileID: 11400000, guid: 7f810912928d96740a8401052af4dae6, type: 2}
   _rootNode: {fileID: 11400000, guid: cd008323524f7a74eb3d02c5c1923260, type: 2}
-  _resourceNode: {fileID: 11400000, guid: 3d6108f9dbe806c4f9d9b767b5d44067, type: 2}
-  _fortNode: {fileID: 11400000, guid: 62ff0a8ae4bf8cd408dc94c730e33715, type: 2}
   _trapNode: {fileID: 11400000, guid: f24d4f25d95f03443b0790256f01910a, type: 2}
   _height: 5
   _width: 9
   _nodePrefab: {fileID: 2348489217457470925, guid: 7020af09ea3928145adacbeb6d3b6e56, type: 3}
   _spacing: 1.5
-  _minNodeCount: 2
-  _maxNodeCount: 3
 --- !u!4 &214742839
 Transform:
   m_ObjectHideFlags: 0
@@ -848,7 +844,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_TargetDisplay: 0
 --- !u!224 &434396380
 RectTransform:
@@ -1646,7 +1642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectedNode: {fileID: 11400000, guid: df983186e33978b429ea10d25aa8fd2f, type: 2}
-  _claimNodeButton: {fileID: 0}
+  _claimNodeButton: {fileID: 564660832}
   _nukeNodeButton: {fileID: 104437341}
   _scoutNodeButton: {fileID: 301264340}
 --- !u!224 &1381690100

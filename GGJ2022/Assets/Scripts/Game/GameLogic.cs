@@ -13,6 +13,8 @@ namespace Game
         
         public int NukeCharges { get; private set; }
         public int ScoutCharges { get; private set; }
+        public int Health { get; private set; }
+        
         public GameLogic(Board.Board board)
         {
             _board = board;
@@ -57,10 +59,21 @@ namespace Game
         {
             if (!CanClaim(node)) return;
             var type = node.Reveal();
-            node.SetOwner(Team.Player);
-            if (type == NodeType.Root)
+            switch (type)
             {
-                GameWon.Invoke();
+                case NodeType.Root:
+                    GameWon?.Invoke();
+                    break;
+                case NodeType.Trap:
+                    Health--;
+                    if (Health <= 0)
+                    {
+                        GameLost?.Invoke();
+                    }
+                    break;
+                default:
+                    node.SetOwner(Team.Player);
+                    break;
             }
         }
         
