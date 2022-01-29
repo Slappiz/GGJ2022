@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -21,6 +22,8 @@ namespace Board
         [SerializeField] private int _maxNodeCount = 3;
         
         public Node[] Nodes { get; private set; }
+        
+        
         
         // private void Awake()
         // {
@@ -46,8 +49,47 @@ namespace Board
             }
             
             SetupNodes();
+
+            StartCoroutine(BreadthFirstSearch());
         }
 
+        private IEnumerator BreadthFirstSearch()
+        {
+            var startRoot = 0;//Random.Range(0, _height);
+            var endRoot = Random.Range(0, _height);
+
+            var frontier = new Queue<Node>();
+            var startNode = GetNodeFromCoordinates(0, startRoot);
+            frontier.Enqueue(startNode);
+            var reached = new List<Node>();
+            reached.Add(startNode);
+
+            while (frontier.Count > 0)
+            {
+                var current = frontier.Dequeue();
+                foreach (var n in current.Neighbors)
+                {
+                    if(n == null) continue;
+                    if(reached.Contains(n)) continue;
+                    frontier.Enqueue(n);
+                    reached.Add(n);
+                    yield return new WaitForSeconds(0.1f);
+                    n.SetColor(Color.blue);
+                }
+            }
+
+            // if (!reached.Contains(GetNodeFromCoordinates(_width, endRoot)))
+            // {
+            //     BreadthFirstSearch();
+            // }
+            Debug.Log($"Last {reached.Last().name}");
+        }
+
+        private Node GetNodeFromCoordinates(int x, int y)
+        {
+            return Nodes.FirstOrDefault(node => node.Coordinate.X == x && node.Coordinate.Y == y);
+        }
+        
         private void SetupNodes()
         {
             for (var x = 0; x < _width;x++)
@@ -64,7 +106,8 @@ namespace Board
                             nodes[i].Setup(_rootNode);
                             continue;
                         }
-                        nodes[i].ToggleNode(false);
+                        nodes[i].Setup(_defaultNode);
+                        //nodes[i].ToggleNode(false);
                     }
                 }
                 else
@@ -77,7 +120,8 @@ namespace Board
                             nodes[i].Setup(_resourceNode);
                             continue;
                         }
-                        nodes[i].ToggleNode(false);
+                        nodes[i].Setup(_defaultNode);
+                        //nodes[i].ToggleNode(false);
                     }
                 }
             }
@@ -97,26 +141,27 @@ namespace Board
 
             var node = Nodes[i] = Instantiate(_nodePrefab);
             node.name = $"Node {i} - ({x},{y})";
-            node.transform.SetParent(transform, false);
-            node.transform.localPosition = position;
+            Transform transform1;
+            (transform1 = node.transform).SetParent(transform, false);
+            transform1.localPosition = position;
             node.Coordinate = Coordinates.FromOffsetCoordinates(x, y);
             // Set neighbors
-            if (x > 0)
+            if (x > 0 && x < _width)
             {
                 node.SetNeighbor(NodeDirection.W, Nodes[i - 1]);
             }
-            if (y > 0)
-            {
-                node.SetNeighbor(NodeDirection.S, Nodes[i - _width]);
-                if (x > 0)
-                {
-                    node.SetNeighbor(NodeDirection.SW, Nodes[i - _width - 1]);
-                }
 
-                if (x < _width)
-                {
-                    node.SetNeighbor(NodeDirection.SE, Nodes[i - _width + 1]);
-                }
+            if (y <= 0) return;
+            
+            node.SetNeighbor(NodeDirection.S, Nodes[i - _width]);
+            if (x > 0 && x < _width)
+            {
+                node.SetNeighbor(NodeDirection.SW, Nodes[i - _width - 1]);
+            }
+
+            if (x < _width - 1)
+            {
+                node.SetNeighbor(NodeDirection.SE, Nodes[i - _width + 1]);
             }
         }
     }

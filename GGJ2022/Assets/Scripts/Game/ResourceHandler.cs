@@ -1,5 +1,4 @@
-﻿using System;
-using Board;
+﻿using Board;
 
 namespace Game
 {

@@ -15,6 +15,7 @@ namespace Board
         public int Cost { get; private set; }
         public Team Team { get; private set; }
         public int Resources { get; private set; }
+        public Node[] Neighbors => _neighbors;
 
         public void Setup(NodeBlueprint blueprint)
         {
@@ -31,6 +32,11 @@ namespace Board
             ToggleNode(true);
         }
 
+        public void SetColor(Color color)
+        {
+            _spriteRenderer.color = color;
+        }
+        
         public void SetHoverHighlight(bool active)
         {
             _hoverHighlight.SetActive(active);

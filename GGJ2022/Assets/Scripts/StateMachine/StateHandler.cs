@@ -20,6 +20,7 @@ namespace StateMachine
 
         public Board.Board Board => _board;
         public ResourceHandler ResourceHandler { get; private set; }
+        public GameLogic GameLogic { get; private set; }
         public PlayerUI PlayerUI => _playerUI;
         public PlayerController PlayerController => _playerController;
         
@@ -31,6 +32,7 @@ namespace StateMachine
         void Init()
         {
             ResourceHandler = new ResourceHandler(0);
+            GameLogic = new GameLogic(Board);
             ChangeState<InitState>();
         }
         

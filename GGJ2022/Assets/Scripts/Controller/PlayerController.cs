@@ -16,7 +16,7 @@ namespace Controller
             if (!Enabled) return;
 
             Hover();
-            // Move this object to the position clicked by the mouse.
+
             if (Input.GetMouseButtonDown(0))
             {
                 SelectNode();
@@ -31,8 +31,8 @@ namespace Controller
             if (Physics.Raycast(ray, out hit, 100.0f))
             {
                 var node = hit.collider.gameObject.GetComponent<Node>();
-                if (HoverNode == node) return;
-                if (HoverNode != null) { HoverNode.RuntimeValue.SetHoverHighlight(false); }
+                if (HoverNode.RuntimeValue == node) return;
+                if (HoverNode.RuntimeValue != null) { HoverNode.RuntimeValue.SetHoverHighlight(false); }
                 HoverNode.RuntimeValue = node;
                 HoverNode.RuntimeValue.SetHoverHighlight(true);
                 //Debug.Log(node != null ? $"Hover {node.name}" : "No hover");
@@ -47,7 +47,8 @@ namespace Controller
             if (Physics.Raycast(ray, out hit, 100.0f))
             {
                 var node = hit.collider.gameObject.GetComponent<Node>();
-                SelectedNode.RuntimeValue.SetSelectedHighlight(false);
+                if (node == null) return;
+                if (SelectedNode.RuntimeValue != null) { SelectedNode.RuntimeValue.SetSelectedHighlight(false); }
                 SelectedNode.RuntimeValue = node;
                 SelectedNode.RuntimeValue.SetSelectedHighlight(true);
                 //Debug.Log(node != null ? $"Selected {node.name}" : "No selection");
