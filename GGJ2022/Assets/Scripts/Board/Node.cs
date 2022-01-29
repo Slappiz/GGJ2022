@@ -1,5 +1,6 @@
 ﻿using Game;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Board
 {
@@ -17,6 +18,7 @@ namespace Board
         public int Resources { get; private set; }
         public Node[] Neighbors => _neighbors;
         public bool Active => gameObject.activeSelf;
+        public Text Label { get; set; }
 
         public void Setup(NodeBlueprint blueprint)
         {

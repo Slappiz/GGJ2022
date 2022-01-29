@@ -3,12 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Board
 {
     public class Board : MonoBehaviour
     {
+        [Header("UI")] 
+        [SerializeField] private Canvas _boardCanvas;
+        [SerializeField] private Text _nodeLabelPrefab;
+        
         [Header("Blueprints")] 
         [SerializeField] private NodeBlueprint _defaultNode;
         [SerializeField] private NodeBlueprint _rootNode;
@@ -52,9 +57,27 @@ namespace Board
             {
                 RandomizeBoard();
                 yield return BreadthFirstSearch();
+                EvaluateNodes();
             }
         }
-        
+
+        private void EvaluateNodes()
+        {
+            foreach (var node in Nodes)
+            {
+                var trapCount = 0;
+                foreach (var neighbor in node.Neighbors)
+                {
+                    if(neighbor == null) continue;
+                    if(neighbor.Type != NodeType.Trap) continue;
+                    trapCount++;
+                }
+
+                node.Label.text = trapCount.ToString();
+                node.Label.enabled = true;
+            }
+        }
+
         private IEnumerator BreadthFirstSearch()
         {
             var frontier = new Queue<Node>();
@@ -167,6 +190,13 @@ namespace Board
             (transform1 = node.transform).SetParent(transform, false);
             transform1.localPosition = position;
             node.Coordinate = Coordinates.FromOffsetCoordinates(x, y);
+
+            var label = Instantiate(_nodeLabelPrefab);
+            label.rectTransform.SetParent(_boardCanvas.transform,false);
+            label.rectTransform.anchoredPosition = new Vector2(position.x, position.y);
+            node.Label = label;
+            node.Label.enabled = false;
+            
             // Set neighbors
             if (x > 0 && x < _width)
             {
