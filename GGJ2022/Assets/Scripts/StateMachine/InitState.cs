@@ -11,7 +11,7 @@ namespace StateMachine
 
         public override IEnumerator Enumerator()
         {
-            StateHandler.PlayerUI?.Init(StateHandler.ResourceHandler);
+            StateHandler.PlayerUI?.Init(StateHandler.GameLogic);
             yield return StateHandler.Board.Build();
             StateHandler.ChangeState<PlayerTurnState>();
         }

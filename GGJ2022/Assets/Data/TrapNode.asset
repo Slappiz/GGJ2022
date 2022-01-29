@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e06a27289b3e3c4b9c1dfbf0c8ae0e6, type: 3}
   m_Name: TrapNode
   m_EditorClassIdentifier: 
-  _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  _color: {r: 1, g: 0.3240026, b: 0.2028302, a: 1}
-  _type: 1
+  _icon: {fileID: 21300000, guid: 04165a47f76bff049b14bfe125e733ab, type: 3}
+  _color: {r: 0.9304087, g: 0.20392156, b: 1, a: 1}
+  _type: 4
   _resourceCost: 0
   _resourceTurn: 1

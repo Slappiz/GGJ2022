@@ -1,5 +1,6 @@
 ﻿using Board;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Variables;
 
 namespace Controller
@@ -14,12 +15,26 @@ namespace Controller
         void Update()
         {
             if (!Enabled) return;
-
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                if (HoverNode.RuntimeValue == null) return;
+                HoverNode.RuntimeValue.SetHoverHighlight(false);
+                HoverNode.RuntimeValue = null;
+                return;
+            }
+            
             Hover();
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButton(0))
             {
-                SelectNode();
+                Debug.Log("Click");
+                if (HoverNode.RuntimeValue != null)
+                {
+                    if(SelectedNode.RuntimeValue == HoverNode.RuntimeValue) return;
+                    if (SelectedNode.RuntimeValue != null) { SelectedNode.RuntimeValue.SetSelectedHighlight(false); }
+                    SelectedNode.RuntimeValue = HoverNode.RuntimeValue;
+                    SelectedNode.RuntimeValue.SetSelectedHighlight(true);
+                }
             }
         }
 
@@ -35,23 +50,6 @@ namespace Controller
                 if (HoverNode.RuntimeValue != null) { HoverNode.RuntimeValue.SetHoverHighlight(false); }
                 HoverNode.RuntimeValue = node;
                 HoverNode.RuntimeValue.SetHoverHighlight(true);
-                //Debug.Log(node != null ? $"Hover {node.name}" : "No hover");
-            }
-        }
-        
-        private void SelectNode()
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 100.0f))
-            {
-                var node = hit.collider.gameObject.GetComponent<Node>();
-                if (node == null) return;
-                if (SelectedNode.RuntimeValue != null) { SelectedNode.RuntimeValue.SetSelectedHighlight(false); }
-                SelectedNode.RuntimeValue = node;
-                SelectedNode.RuntimeValue.SetSelectedHighlight(true);
-                //Debug.Log(node != null ? $"Selected {node.name}" : "No selection");
             }
         }
     }

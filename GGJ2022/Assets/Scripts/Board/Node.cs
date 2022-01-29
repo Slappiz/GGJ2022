@@ -6,11 +6,14 @@ namespace Board
 {
     public class Node : MonoBehaviour
     {
+        [SerializeField] private Sprite _hiddenSprite;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private GameObject _hoverHighlight;
         [SerializeField] private GameObject _selectedHighlight;
         [SerializeField] private Node[] _neighbors = new Node[8];
 
+        private NodeBlueprint _blueprint;
+        
         public Coordinates Coordinate { get; set; }
         public NodeType Type { get; private set; }
         public int Cost { get; private set; }
@@ -19,15 +22,18 @@ namespace Board
         public Node[] Neighbors => _neighbors;
         public bool Active => gameObject.activeSelf;
         public Text Label { get; set; }
+        public bool IsRevealed { get; private set; }
 
         public void Setup(NodeBlueprint blueprint)
         {
+            _blueprint = blueprint;
+            
             Type = blueprint.Type;
             Cost = blueprint.ResourceCost;
             Resources = blueprint.ResourceTurn;
             
-            _spriteRenderer.sprite = blueprint.Icon;
-            _spriteRenderer.color = blueprint.Color;
+            // _spriteRenderer.sprite = blueprint.Icon;
+            // _spriteRenderer.color = blueprint.Color;
             
             SetSelectedHighlight(false);
             SetHoverHighlight(false);
@@ -35,6 +41,20 @@ namespace Board
             ToggleNode(true);
         }
 
+        public NodeType RevealNode()
+        {
+            IsRevealed = true;
+            
+            if (Type != NodeType.Trap)
+            {
+                Label.enabled = true;
+            }
+            
+            _spriteRenderer.sprite = _blueprint.Icon;
+
+            return Type;
+        }
+        
         public void SetColor(Color color)
         {
             _spriteRenderer.color = color;
@@ -111,6 +131,7 @@ namespace Board
         public void SetOwner(Team team)
         {
             Team = team;
+            _spriteRenderer.color = Color.blue;
         }
     }
 }

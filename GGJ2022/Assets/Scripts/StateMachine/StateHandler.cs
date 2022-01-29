@@ -31,8 +31,8 @@ namespace StateMachine
 
         void Init()
         {
-            ResourceHandler = new ResourceHandler(0);
-            GameLogic = new GameLogic(Board);
+            ResourceHandler = new ResourceHandler(5);
+            GameLogic = new GameLogic(Board, ResourceHandler);
             ChangeState<InitState>();
         }
         

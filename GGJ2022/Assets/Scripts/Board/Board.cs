@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Game;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -74,7 +75,7 @@ namespace Board
                 }
 
                 node.Label.text = trapCount.ToString();
-                node.Label.enabled = true;
+                node.Label.enabled = false;
             }
         }
 
@@ -96,9 +97,8 @@ namespace Board
                     if(cameFrom.ContainsKey(n)) continue;
                     frontier.Enqueue(n);
                     cameFrom.Add(n, current);
-                    yield return new WaitForSeconds(0.1f);
-                    n.SetColor(Color.blue);
                 }
+                yield return null;
             }
 
             if (!cameFrom.ContainsKey(GoalNode))
@@ -112,10 +112,9 @@ namespace Board
             var path = new List<Node>();
             while (currentPathNode != StartNode)
             {
-                currentPathNode.SetColor(Color.green);
                 path.Add(currentPathNode);
                 currentPathNode = cameFrom[currentPathNode];
-                yield return new WaitForSeconds(0.1f);
+                yield return null;
             }
 
             _boardIsValid = true;
@@ -158,6 +157,7 @@ namespace Board
             var rootIndex = Random.Range(0, _height);
             firstColumnNodes[rootIndex].Setup(_rootNode);
             StartNode = firstColumnNodes[rootIndex];
+            StartNode.SetOwner(Team.Player);
             foreach (var neighbor in StartNode.Neighbors)
             {
                 if (neighbor == null) continue;
@@ -170,6 +170,8 @@ namespace Board
             var goalIndex = Random.Range(0, _height);
             lastColumnNodes[goalIndex].Setup(_rootNode);
             GoalNode = lastColumnNodes[goalIndex];
+            GoalNode.RevealNode();
+            GoalNode.SetColor(Color.green);
         }
 
         private List<Node> GetNodesFromColumn(int x)

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e06a27289b3e3c4b9c1dfbf0c8ae0e6, type: 3}
   m_Name: DefaultNode
   m_EditorClassIdentifier: 
-  _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  _icon: {fileID: 21300000, guid: c12336ff0a787e74f9b66975e98f83f6, type: 3}
   _color: {r: 1, g: 1, b: 1, a: 1}
   _type: 0
   _resourceCost: 0
