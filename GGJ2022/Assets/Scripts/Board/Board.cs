@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Board
 {
@@ -21,12 +23,15 @@ namespace Board
         [SerializeField] private float _spacing = 2f;
         [SerializeField] private int _minNodeCount = 2;
         [SerializeField] private int _maxNodeCount = 3;
+
+        private Coroutine _activeCoroutine;
+        private bool _boardIsValid;
         
         public Node[] Nodes { get; private set; }
         public Node StartNode { get; private set; }
         public Node GoalNode { get; private set; }
 
-        public void Build()
+        public IEnumerator Build()
         {
             Nodes = new Node[_height * _width];
             
@@ -37,12 +42,19 @@ namespace Board
                     CreateNode(x, y, i++);
                 }
             }
-            
-            SetupNodes();
 
-            StartCoroutine(BreadthFirstSearch());
+            yield return SetupBoard();
         }
 
+        private IEnumerator SetupBoard()
+        {
+            while (!_boardIsValid)
+            {
+                RandomizeBoard();
+                yield return BreadthFirstSearch();
+            }
+        }
+        
         private IEnumerator BreadthFirstSearch()
         {
             var frontier = new Queue<Node>();
@@ -65,6 +77,12 @@ namespace Board
                     n.SetColor(Color.blue);
                 }
             }
+
+            if (!cameFrom.ContainsKey(GoalNode))
+            {
+                _boardIsValid = false;
+                yield break;
+            }
             
             // path
             var currentPathNode = GoalNode; // goal
@@ -76,6 +94,8 @@ namespace Board
                 currentPathNode = cameFrom[currentPathNode];
                 yield return new WaitForSeconds(0.1f);
             }
+
+            _boardIsValid = true;
         }
         
 
@@ -83,58 +103,50 @@ namespace Board
         {
             return Nodes.FirstOrDefault(node => node.Coordinate.X == x && node.Coordinate.Y == y);
         }
-        
-        private void SetupNodes()
-        {
-            for (var x = 0; x < _width;x++)
-            {
-                var nodes = GetNodesFromColumn(x);
 
-                if (x == 0 || x == _width - 1)
+        private void RandomizeBoard()
+        {
+            foreach (var node in Nodes)
+            {
+                var typeIndex = Random.Range(2, Enum.GetNames(typeof(NodeType)).Length); // Skip NodeType 'None' and 'Root'
+                var type = (NodeType)typeIndex;
+
+                switch (type)
                 {
-                    var rootIndex = Random.Range(0, _height);
-                    for (var i = 0; i < nodes.Count; i++)
-                    {
-                        if (rootIndex == i)
-                        {
-                            nodes[i].Setup(_rootNode);
-                            if (x == 0) { StartNode = nodes[i]; }
-                            else { GoalNode = nodes[i]; }
-                            continue;
-                        }
-                        nodes[i].Setup(_defaultNode);
-                        //nodes[i].ToggleNode(false);
-                    }
-                }
-                else if (x == 2 || x == 4 || x == 6)
-                {
-                    var pathIndex = Random.Range(0, _height);
-                    for (var i = 0; i < nodes.Count; i++)
-                    {
-                        if (pathIndex != i)
-                        {
-                            nodes[i].Setup(_trapNode);
-                            continue;
-                        }
-                        nodes[i].Setup(_defaultNode);
-                        //nodes[i].ToggleNode(false);
-                    }
-                }
-                else
-                {
-                    var resIndex = Random.Range(0, _height);
-                    for (var i = 0; i < nodes.Count; i++)
-                    {
-                        if (resIndex == i)
-                        {
-                            nodes[i].Setup(_resourceNode);
-                            continue;
-                        }
-                        nodes[i].Setup(_defaultNode);
-                        //nodes[i].ToggleNode(false);
-                    }
+                    case NodeType.Resource:
+                        node.Setup(_resourceNode);
+                        break;
+                    case NodeType.Fort:
+                        node.Setup(_fortNode);
+                        break;
+                    case NodeType.Trap:
+                        node.Setup(_trapNode);
+                        break;
+                    case NodeType.None:
+                    case NodeType.Root:
+                    default:
+                        Debug.Log("Shouldn't get here!");
+                        break;
                 }
             }
+            
+            // Set start
+            var firstColumnNodes = GetNodesFromColumn(0);
+            var rootIndex = Random.Range(0, _height);
+            firstColumnNodes[rootIndex].Setup(_rootNode);
+            StartNode = firstColumnNodes[rootIndex];
+            foreach (var neighbor in StartNode.Neighbors)
+            {
+                if (neighbor == null) continue;
+                // Set all neighbors to default
+                neighbor.Setup(_defaultNode);
+            }
+      
+            // Set Goal
+            var lastColumnNodes = GetNodesFromColumn(_width - 1);
+            var goalIndex = Random.Range(0, _height);
+            lastColumnNodes[goalIndex].Setup(_rootNode);
+            GoalNode = lastColumnNodes[goalIndex];
         }
 
         private List<Node> GetNodesFromColumn(int x)
