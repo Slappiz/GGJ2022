@@ -140,7 +140,6 @@ namespace Board
             foreach (var node in Nodes)
             {
                 var typeIndex = Random.Range(2, Enum.GetNames(typeof(NodeType)).Length); // Skip NodeType 'None' and 'Root'
-                Debug.Log(typeIndex);
                 var type = (NodeType)typeIndex;
 
                 switch (type)

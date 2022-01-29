@@ -21,6 +21,7 @@ namespace Game
             
             NukeCharges = 1;
             ScoutCharges = 2;
+            Health = 2;
         }
         
 

@@ -1,9 +1,8 @@
 ﻿using System.Collections;
-using Game;
 
 namespace StateMachine
 {
-    public class AiTurnState : StateHandler.AbstractState
+    public class WinState : StateHandler.AbstractState
     {
         public override void Enter()
         {
@@ -13,12 +12,10 @@ namespace StateMachine
         public override IEnumerator Enumerator()
         {
             yield return null;
-            StateHandler.ChangeState<PlayerTurnState>();
         }
 
         public override void Exit()
         {
-            
         }
     }
 }

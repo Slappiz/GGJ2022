@@ -13,7 +13,7 @@ namespace StateMachine
         {
             StateHandler.PlayerUI?.Init(StateHandler.GameLogic);
             yield return StateHandler.Board.Build();
-            StateHandler.ChangeState<PlayerTurnState>();
+            StateHandler.ChangeState<GameplayState>();
         }
 
         public override void Exit()

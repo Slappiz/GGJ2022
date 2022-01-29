@@ -31,10 +31,6 @@ namespace StateMachine
         void Init()
         {
             GameLogic = new GameLogic(_board);
-
-            GameLogic.GameWon += OnGameWon;
-            GameLogic.GameLost += OnGameLost;
-            
             ChangeState<InitState>();
         }
 
@@ -45,24 +41,6 @@ namespace StateMachine
             public abstract void Enter();
             public abstract IEnumerator Enumerator();
             public abstract void Exit();
-        }
-        
-        private void OnGameLost()
-        {
-            // change to lose state
-            Debug.Log("Game Lost");
-        }
-
-        private void OnGameWon()
-        {
-            // change to win state
-            Debug.Log("Game Won");
-        }
-
-        private void OnDestroy()
-        {
-            GameLogic.GameWon -= OnGameWon;
-            GameLogic.GameLost -= OnGameLost;
         }
 
         public void ChangeState<T>() where T : AbstractState, new()

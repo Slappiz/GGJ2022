@@ -28,6 +28,12 @@ namespace Ui
             _scoutNodeButton.onClick.AddListener(HandleScoutClick);
             
             HandleSelectedNodeChanged(_selectedNode.RuntimeValue);
+            SetVisibility(false);
+        }
+
+        public void SetVisibility(bool active)
+        {
+            transform.gameObject.SetActive(active);
         }
 
         private void RefreshAllButtonTexts()
