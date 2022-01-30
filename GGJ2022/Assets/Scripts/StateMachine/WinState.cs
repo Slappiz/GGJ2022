@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace StateMachine
 {
@@ -31,11 +32,13 @@ namespace StateMachine
         private void HandleBackToMain()
         {
             _waitingForInput = false;
+            SceneManager.LoadScene("Menu");
         }
 
         private void HandlePlayAgain()
         {
             _waitingForInput = false;
+            SceneManager.LoadScene("Game");
         }
     }
 }
