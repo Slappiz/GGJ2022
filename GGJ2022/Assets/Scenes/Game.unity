@@ -2570,6 +2570,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectedNode: {fileID: 11400000, guid: df983186e33978b429ea10d25aa8fd2f, type: 2}
+  _healthSegmentPrefab: {fileID: 1813231564198313791, guid: 4ca8d2b4209adc24f84b4c8e6480d24b, type: 3}
+  _healthContainer: {fileID: 2070277543}
   _claimNodeButton: {fileID: 564660832}
   _nukeNodeButton: {fileID: 104437341}
   _scoutNodeButton: {fileID: 301264340}

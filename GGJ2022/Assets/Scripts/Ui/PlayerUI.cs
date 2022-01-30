@@ -23,13 +23,15 @@ namespace Ui
         [SerializeField] private Button _scoutNodeButton;
         
         private GameLogic _logic;
+        private GameObject[] _healthSegments;
+        
         public void Init(GameLogic logic)
         {
             _logic = logic;
-
-            for (int i = 1; i <= _logic.Health; i++)
+            _healthSegments = new GameObject[_logic.Health];
+            for (int i = 0; i < _logic.Health; i++)
             {
-                Instantiate(_healthSegmentPrefab, _healthContainer);
+                _healthSegments[i] = Instantiate(_healthSegmentPrefab, _healthContainer);
             }
             
             _selectedNode.OnChanged += HandleSelectedNodeChanged;
@@ -46,13 +48,21 @@ namespace Ui
             transform.gameObject.SetActive(active);
         }
 
+        private void SetHealth()
+        {
+            for (var i = 0; i < _healthSegments.Length; i++)
+            {
+                if (i + 1 > _logic.Health)
+                {
+                    _healthSegments[i].SetActive(false);
+                }
+            }
+        }
+        
         private void RefreshAll()
         {
-            while(_healthContainer.childCount > _logic.Health)
-            {
-                Destroy(_healthContainer.GetChild(0).gameObject);
-            }
-            
+            SetHealth();
+
             RefreshButtonText(_claimNodeButton, $"Claim");
             RefreshButtonText(_nukeNodeButton, $"Nuke ({_logic.NukeCharges})");
             RefreshButtonText(_scoutNodeButton, $"Scout ({_logic.ScoutCharges})");
