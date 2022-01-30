@@ -25,7 +25,7 @@ namespace Controller
             
             Hover();
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 if (HoverNode.RuntimeValue != null)
                 {

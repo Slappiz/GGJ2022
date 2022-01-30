@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Board;
 using Game;
+using StateMachine;
 using UnityEngine;
 using UnityEngine.UI;
 using Variables;
@@ -12,6 +13,10 @@ namespace Ui
         [Header("Variables")]
         [SerializeField] private NodeVariable _selectedNode;
 
+        [Header("Health")] 
+        [SerializeField] private GameObject _healthSegmentPrefab;
+        [SerializeField] private Transform _healthContainer;
+        
         [Header("Buttons")] 
         [SerializeField] private Button _claimNodeButton;
         [SerializeField] private Button _nukeNodeButton;
@@ -21,6 +26,11 @@ namespace Ui
         public void Init(GameLogic logic)
         {
             _logic = logic;
+
+            for (int i = 1; i <= _logic.Health; i++)
+            {
+                Instantiate(_healthSegmentPrefab, _healthContainer);
+            }
             
             _selectedNode.OnChanged += HandleSelectedNodeChanged;
             _claimNodeButton.onClick.AddListener(HandleClaimClick);
@@ -36,8 +46,13 @@ namespace Ui
             transform.gameObject.SetActive(active);
         }
 
-        private void RefreshAllButtonTexts()
+        private void RefreshAll()
         {
+            while(_healthContainer.childCount > _logic.Health)
+            {
+                Destroy(_healthContainer.GetChild(0).gameObject);
+            }
+            
             RefreshButtonText(_claimNodeButton, $"Claim");
             RefreshButtonText(_nukeNodeButton, $"Nuke ({_logic.NukeCharges})");
             RefreshButtonText(_scoutNodeButton, $"Scout ({_logic.ScoutCharges})");
@@ -84,7 +99,7 @@ namespace Ui
 
         private void HandleSelectedNodeChanged(Node node)
         {
-            RefreshAllButtonTexts();
+            RefreshAll();
             if (node == null)
             {
                 _claimNodeButton.interactable = false;

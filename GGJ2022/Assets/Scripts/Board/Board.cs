@@ -58,6 +58,7 @@ namespace Board
             
             GoalNode.Reveal();
             GoalNode.SetColor(Color.green);
+            GoalNode.Label.enabled = false;
             
             StartNode.SetOwner(Team.Player);
             foreach (var neighbor in StartNode.Neighbors)
@@ -107,8 +108,8 @@ namespace Board
                     frontier.Enqueue(n);
                     cameFrom.Add(n, current);
                 }
-                yield return null;
             }
+            yield return null;
 
             if (!cameFrom.ContainsKey(GoalNode))
             {
@@ -123,8 +124,8 @@ namespace Board
             {
                 path.Add(currentPathNode);
                 currentPathNode = cameFrom[currentPathNode];
-                yield return null;
             }
+            yield return null;
 
             _boardIsValid = true;
         }

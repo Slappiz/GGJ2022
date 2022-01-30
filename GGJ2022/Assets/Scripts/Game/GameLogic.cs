@@ -20,7 +20,7 @@ namespace Game
             _board = board;
             
             NukeCharges = 1;
-            ScoutCharges = 2;
+            ScoutCharges = 3;
             Health = 2;
         }
         

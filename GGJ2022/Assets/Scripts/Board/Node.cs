@@ -69,6 +69,7 @@ namespace Board
         public void Nuke()
         {
             Type = NodeType.Standard;
+            if (Team == Team.Player) return;
             _spriteRenderer.color = Color.gray;
         }
         
